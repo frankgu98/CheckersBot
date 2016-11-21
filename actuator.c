@@ -58,7 +58,7 @@ bool rotateToCoord(actuator & act, float coord){
 }
 
 bool rotateToCoord(actuator & act1, actuator & act2, float coord){
-	if(0 <= coord || coord <= act1.maxCoord){
+	if(0 <= coord && coord <= act1.maxCoord && coord <= act2.maxCoord){
 
 		if(act1.curCoord < coord && act2.curCoord < coord){
 
@@ -103,7 +103,6 @@ task main()
 	initActuator(act1, motorA, 50, 2.1, 1000);
 	initActuator(act2, motorB, 50, 2.1, 1000);
 	//select dist with arrow buttons
-	displayString(0, "nope");
 	wait1Msec(10000);
 }
 #endif MAIN
