@@ -31,64 +31,65 @@ while(doJump(tempX, tempY, tempTurn))
 
 //proudly brought to you by
 //					||~~ Chris & Frank ~~||
-bool doJump(int &x, int &y, turn & tempTurn){
-	if(x-2 > 0||y+2 < 7){
+bool doJump(int & x, int & y, turn & tempTurn){
+	bool flag = false;
+	if(x-2 >= 0||y+2 <= 7){
 		int endx = x -2;
 		int endy = y +2;
 		int enex = x -1;
 		int eney = y + 1;
 		if(BOARD[endx][endy] == EMPTY && (BOARD[enex][eney] == EKING || BOARD[enex][eney] == EMAN)){
-			tempTurn.tiles[tempTurn.nCaps].x -= 2;
-			tempTurn.tiles[tempTurn.nCaps].y += 2;
-			x-=2;
-			y+=2;
-			return true;
+			x=endx;
+			y=endy;
+			flag = true;
 		}
 	}
-	else if(x+2 < 7||y+2 < 7){
+	else if(x+2 <= 7||y+2 <= 7){
 		int endx = x +2;
 		int endy = y +2;
 		int enex = x +1;
 		int eney = y + 1;
 		if(BOARD[endx][endy] == EMPTY && (BOARD[enex][eney] == EKING || BOARD[enex][eney] == EMAN)){
-			tempTurn.tiles[tempTurn.nCaps].x += 2;
-			tempTurn.tiles[tempTurn.nCaps].y += 2;
-			x+=2;
-			y+=2;
-			return true;
+			x = endx;
+			y = endy;
+			flag = true;
 		}
 	}
 	if(BOARD[x][y] == RKING){
-		if(x-2 > 0||y-2 > 0){
-			int endx = x -2;
-			int endy = y -2;
-			int enex = x -1;
+		if(x-2 >= 0||y-2 >= 0){
+			int endx = x - 2;
+			int endy = y - 2;
+			int enex = x - 1;
 			int eney = y - 1;
 			if(BOARD[endx][endy] == EMPTY && (BOARD[enex][eney] == EKING || BOARD[enex][eney] == EMAN)){
-				tempTurn.tiles[tempTurn.nCaps].x -= 2;
-				tempTurn.tiles[tempTurn.nCaps].y -= 2;
-				x-=2;
-				y-=2;
-				return true;
+				x=endx;
+				y=endy;
+				flag = true;
 			}
 		}
-		else if(x-2 > 0||y+2 < 7){
+		else if(x-2 >= 0||y+2 <= 7){
 			int endx = x -2;
 			int endy = y +2;
 			int enex = x -1;
 			int eney = y + 1;
 			if(BOARD[endx][endy] == EMPTY && (BOARD[enex][eney] == EKING || BOARD[enex][eney] == EMAN)){
-				tempTurn.tiles[tempTurn.nCaps].x += 2;
-				tempTurn.tiles[tempTurn.nCaps].y -= 2;
-				x+=2;
-				y-=2;
-				return true;
+				x=endx;
+				y=endy;
+				flag = true;
 			}
 		}
 	}
-	return false;
+	tempTurn.tiles[tempTurn.nCaps].x = endx;
+	tempTurn.tiles[tempTurn.nCaps].y = endy;
+	tempTurn.nCaps += flag;
+	return flag;
 }
 
+void getJumps(int startx, starty, turn & tempTurn){
+
+	while(doJump(startx,starty,tempTurn)){}
+	
+}
 
 void getMove(int x, int y){ //takes a coordinate, checks the piece, determines all possible moves for that piece in the next two moves
     for (int i = 0; i < 12; i++){ //re-initializing turnPoss[]
@@ -105,6 +106,13 @@ void getMove(int x, int y){ //takes a coordinate, checks the piece, determines a
 
     //   INSERT HERE    //  INSERT HERE    //   INSERT HERE  //   INSERT HERE    //   INSERT HERE    //   INSERT HERE    //   INSERT HERE    //   INSERT HERE    //   INSERT HERE    //   INSERT HERE    //   INSERT HERE    //   INSERT HERE    //   INSERT HERE    //   INSERT HERE
     //probably insert doJumps here!!
+    turn tempTurn;
+    
+    getJumps(x,y,tempTurn);
+    if (tempTurn.nCaps > 0){
+	turnPoss[tCount] = tempTurn;
+	tCount++;
+    }
 
     if (BOARD[x][y] == 2) { //checks if the piece belongs to robot
 
@@ -136,7 +144,10 @@ void getMove(int x, int y){ //takes a coordinate, checks the piece, determines a
 }
 
 int getMoves(){ //takes the whole BOARD
-//for each piece, gets all moves and puts legal loves into allTurnPoss[]
+	
+	
+/*
+	//for each piece, gets all moves and puts legal loves into allTurnPoss[]
     for (int i = 0; i < 20; i++){ //re-intialize allTurnPoss
         for (int j = 0; j < 3; j++){
             allTurnPoss[i].tiles[j].x = 0;
@@ -162,6 +173,7 @@ int getMoves(){ //takes the whole BOARD
         }
     }
     return allTurnIndex; //returns the number of elements in the array (max index + 1)
+*/
 }
 
 /*
